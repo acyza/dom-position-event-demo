@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>监听位置信息Demo</title>
+  <style>
+    #target {
+      background-color: red;
+      width: 100px;
+      height: 100px;
+      position: relative;
+      transition: 1s;
+    }
+    #target > div {
+      transition: none;
+      width: 1px;
+      height: 1px;
+      position: absolute;
+    }
+  </style>
+</head>
+<body>
+  <div id="target">
+    <div id="xIncrease"></div>
+    <div id="xDecrease"></div>
+    <div id="yIncrease"></div>
+    <div id="yDecrease"></div>
+  </div>
+  实时位置信息：<div id="msg"></div>
+  调整margin-top：<input type="number" oninput="target.style.marginTop=value+'px'"/>
+  <br>
+  调整margin-left：<input type="number" oninput="target.style.marginLeft=value+'px'"/>
+  <script>
+    const msg = document.querySelector("#msg")
+    const target = document.querySelector("#target")
+    const xIncrease = document.querySelector("#xIncrease")
+    const xDecrease = document.querySelector("#xDecrease")
+    const yIncrease = document.querySelector("#yIncrease")
+    const yDecrease = document.querySelector("#yDecrease")
+    const obs = new IntersectionObserver(() => {
+      requestAnimationFrame(update);
+      msg.innerHTML = JSON.stringify(target.getBoundingClientRect());
+      console.log("position update")
+    })
+    obs.observe(xIncrease)
+    obs.observe(xDecrease)
+    obs.observe(yIncrease)
+    obs.observe(yDecrease)
+    function update(){
+      const rect = target.getBoundingClientRect();
+      xIncrease.style.left = -rect.left - 2 + "px";
+      xDecrease.style.left = -rect.left + "px";
+      yIncrease.style.top = -rect.top - 2 + "px";
+      yDecrease.style.top = -rect.top + "px";
+    }
+    update();
+  </script>
+</body>
+</html>
